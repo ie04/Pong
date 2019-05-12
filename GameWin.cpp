@@ -26,22 +26,13 @@
 #include "GameWin.h"
 
 GameWin::GameWin(std::string win_name, int height, int width) : sf::RenderWindow(sf::VideoMode(height, width), win_name), usr_rak(*this,0,250), 
-cpu_rak(*this, 460, 250), cpu_ball(*this), usr_scoreboard("User",0,0), cpu_scoreboard("CPU",400,0)
+cpu_rak(*this, 460, 250), cpu_ball(*this, usr_rak, cpu_rak), usr_scoreboard("User",0,0), cpu_scoreboard("CPU",400,0), game_reset(false)
 
 {
     this->setVerticalSyncEnabled(true);
 }
 
-
-bool GameWin::sprites_collided(sf::Sprite sprite1, sf::Sprite sprite2){
-    
-    if(Collision::PixelPerfectTest(sprite1, sprite2))
-        return true;
-    else
-        return false;
-}
-
-int GameWin::who_wins(corner which){
+int GameWin::who_wins(side which){
     switch(which){
         case LEFT:
             return 1;
@@ -56,6 +47,18 @@ int GameWin::who_wins(corner which){
 void GameWin::reset_game(){
     usr_rak.set_position(0,250);
     cpu_rak.set_position(460,250);
+    cpu_rak.set_collide(false);
     cpu_ball.set_position(this->getSize().x/2, this->getSize().y/2);
-    sleep(5);
+    this->game_reset = true;
+}
+
+bool GameWin::is_game_reset(){
+    if(game_reset)
+        return true;
+    else
+        return false;
+}
+
+void GameWin::set_reset(bool val) {
+    game_reset = val;
 }

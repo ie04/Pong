@@ -35,10 +35,13 @@ public:
     Racket(sf::Window&, std::string image_name="racket.png", bool smooth=false, int scale=5);
     void move_up();
     void move_down();
-    void move_to(Ball& ball);
-   
-protected:
+    void move_to(Ball&);
+    void move_to(float);
+    bool has_ball_collided() { return collided_with_ball; }
+    void set_collide(bool val) { collided_with_ball = val; }
+private:
     int speed;
+    bool collided_with_ball;
 };
 
 #endif /* RACKET_H */

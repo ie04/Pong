@@ -23,9 +23,9 @@
  */
 #include <iostream>
 #include "Racket.h"
-#include "Ball.h"
 #include "urand.h"
 #include "Constants.h"
+
 Racket::Racket(sf::Window& win, int xpos, int ypos, int n_speed): Sprite(win, "racket.png", false, 5, xpos, ypos), speed(n_speed) {
     this->set_position(xpos,ypos);
 }
@@ -45,6 +45,9 @@ void Racket::move_down(){
     
 }
 void Racket::move_to(Ball& ball){
+    if(has_ball_collided()){
+        move_to(250);
+    }
     if(ball.get_xpos() > urand::rand(0,200)){ //Racket "AI"
     if(this->y_pos < ball.get_ypos()){
         move_down();
@@ -52,5 +55,13 @@ void Racket::move_to(Ball& ball){
     else if(this->y_pos > ball.get_ypos()){
         move_up();
     }
+    }
+}
+void Racket::move_to(float y_pos){
+    if(this->y_pos < y_pos){
+        move_down();
+    }
+    else if(this->y_pos > y_pos){
+        move_up();
     }
 }

@@ -23,14 +23,17 @@
  */
 #include <iostream>
 #include "Ball.h"
-Ball::Ball(sf::Window& window): Sprite(window, "ball.png", false), x_speed(2), y_speed(2) {
+#include "Collision.h"
+#include "Racket.h"
+
+Ball::Ball(sf::Window& window, Racket& usr, Racket& cpu): Sprite(window, "ball.png", false), x_speed(2), y_speed(2), usr_rak(usr), cpu_rak(cpu){
     x_pos = window.getSize().x/2; //Center of window
     y_pos = window.getSize().y/2;
     set_position(x_pos, y_pos); //Updates sprite position
 }
 
-corner Ball::move(bool collision){
-    corner corner_hit = NONE;
+side Ball::move(){
+    side corner_hit = NONE;
     
     if(this->get_xpos() < 0){
         corner_hit = LEFT;
@@ -48,22 +51,28 @@ corner Ball::move(bool collision){
         corner_hit = BOTTOM;
         y_speed = -y_speed;  
     }
-    if(collision){
-        x_speed = -x_speed;
-        this->user_collided = true;
+    if( ball_collided(usr_rak) ){
+        x_speed = -x_speed; 
+        cpu_rak.set_collide(false); //CPU can move again after user hits ball
     }
     
+    if( ball_collided(cpu_rak) ){
+        x_speed = -x_speed;
+        cpu_rak.set_collide(true); //CPU goes to center and waits for user to hit ball
+    }
     x_pos+=x_speed;
     y_pos+=y_speed;
     
     this->move_x(x_pos);  
     this->move_y(y_pos);
     
-    std::cout << "Xspeed is at " << x_speed << std::endl;
-    std::cout << "Yspeed is at " << y_speed << std::endl;
-    
     return corner_hit;
 }
 
-
-
+bool Ball::ball_collided(Racket& racket) {
+    if( Collision::PixelPerfectTest(this->get_sprite(), racket.get_sprite()) )
+        return true;
+    else
+        return false;
+    
+}

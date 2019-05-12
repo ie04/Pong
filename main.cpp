@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <unistd.h>
 #include "GameWin.h"
 #include "Text.h"
 #include "Constants.h"
@@ -15,7 +16,7 @@ int main()
     bool collision = false;
     int usr_score = 0;
     int cpu_score = 0;
-    corner corner_hit;
+    side corner_hit;
     
     GameWin main_win("Pong"); //Creates window 500 by 500
     
@@ -38,14 +39,8 @@ int main()
                         main_win.usr_rak.move_down();        
 
         }    
-
-        if( main_win.sprites_collided(main_win.usr_rak.get_sprite(), main_win.cpu_ball.get_sprite()) || main_win.sprites_collided(main_win.cpu_rak.get_sprite(), main_win.cpu_ball.get_sprite()) ) { //User or CPU
-            collision = true;
-        }else{
-            collision = false;
-        }
-           
-        corner_hit = main_win.cpu_ball.move(collision); //Moves being mindful of collisions
+            
+        corner_hit = main_win.cpu_ball.move(); //Moves being mindful of collisions
         
         if(main_win.who_wins(corner_hit) > 0){
             
@@ -67,7 +62,10 @@ int main()
         main_win.draw(main_win.usr_scoreboard.get_text());
         main_win.draw(main_win.cpu_scoreboard.get_text());
         main_win.display();
-        
+        if(main_win.is_game_reset()){
+            sleep(5);
+            main_win.set_reset(false);
+        }
     }
 
     return 0;

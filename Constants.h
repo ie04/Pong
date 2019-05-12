@@ -28,6 +28,6 @@
 #define TITLE_HEIGHT 30
 #define WIN_HEIGHT 500
 #define WIN_WIDTH 500
-typedef enum { TOP, BOTTOM, LEFT, RIGHT, NONE } corner;
+typedef enum { TOP, BOTTOM, LEFT, RIGHT, NONE } side;
 #endif /* CONSTANTS_H */
 

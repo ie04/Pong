@@ -24,18 +24,23 @@
 
 #ifndef BALL_H
 #define BALL_H
+
 #include "Sprite.h"
 #include "Constants.h"
-class Ball: public Sprite{
+class Racket; //Forward declared so dependencies aren't circular
+
+class Ball : public Sprite{
 public:
-    Ball(sf::Window&);
+    Ball(sf::Window&, Racket&, Racket&);
     ~Ball(){}
-    corner move(bool);
+    side move(); 
+    bool ball_collided(Racket&); //Returns true if ball collided with racket (pixel perfect)
 private:
     int x_speed;
     int y_speed;
     int speed; 
-    bool user_collided;
+    Racket& usr_rak;
+    Racket& cpu_rak;
 };
 
 #endif /* BALL_H */

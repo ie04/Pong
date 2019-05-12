@@ -31,20 +31,27 @@
 #include "Ball.h"
 #include "Score.h"
 #include "Collision.h"
+
 class GameWin : public sf::RenderWindow {
 public:
-    GameWin(std::string win_name, int height = WIN_HEIGHT, int width = WIN_WIDTH);
-    bool sprites_collided(sf::Sprite, sf::Sprite);
-    int who_wins(corner);
-    void reset_game();
-    
     Racket usr_rak;
     Racket cpu_rak;
     Ball cpu_ball;
     Score usr_scoreboard;
     Score cpu_scoreboard;
     
+    GameWin(std::string win_name, int height = WIN_HEIGHT, int width = WIN_WIDTH);
+    
+    int who_wins(side);
+    
+    void reset_game();
+    
+    bool is_game_reset();
+    
+    void set_reset(bool);
+    
 private:
+    bool game_reset;
 };
 
 #endif /* GAMEWIN_H */
